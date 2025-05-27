@@ -1,14 +1,12 @@
 import './App.css'
 import Header from './components/Header'
+import ShoppingList from './components/ShoppingList/ShoppingList'
 
 function App() {
   return (
     <>
-    <Header/>
-      <h1>Shopping List</h1>
-      <div className="card">
-        Placeholder
-      </div>
+      <Header />
+      <ShoppingList />
     </>
   )
 }
