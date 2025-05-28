@@ -1,13 +1,27 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTypedSelector } from '../../store/hooks';
 import { useState } from 'react';
 import AddItemModal from './AddItemModal';
 
 const ShoppingList = () => {
     const items = useTypedSelector((state) => state.shopping.items);
+    const loading = useTypedSelector((state) => state.shopping.loading);
     const [openModal, setOpenModal] = useState(false);
     const handleOpenModal = () => setOpenModal(true);
     const handleCloseModal = () => setOpenModal(false);
+
+    if (loading) {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+            >
+                <CircularProgress color='primary' size={92} />
+            </Box>
+        );
+    }
 
     if (!items || items.length === 0) {
         return (

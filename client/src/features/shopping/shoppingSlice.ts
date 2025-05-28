@@ -8,10 +8,12 @@ interface ShoppingItem {
 
 interface ShoppingState {
   items: ShoppingItem[];
+  loading: boolean;
 }
 
 const initialState: ShoppingState = {
   items: [],
+  loading: false,
 };
 
 const shoppingSlice = createSlice({
@@ -49,6 +51,9 @@ const shoppingSlice = createSlice({
     setItems: (state, action: PayloadAction<ShoppingItem[]>) => {
       state.items = action.payload;
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
   },
 });
 
@@ -58,6 +63,7 @@ export const {
   editItem,
   toggleCompleted,
   setItems,
+  setLoading,
 } = shoppingSlice.actions;
 
 export default shoppingSlice.reducer;

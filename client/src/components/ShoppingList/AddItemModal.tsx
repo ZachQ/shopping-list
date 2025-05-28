@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     Box,
     Typography,
@@ -15,6 +16,7 @@ import {
     styled,
     AppBar,
 } from '@mui/material';
+import { setLoading } from '../../features/shopping/shoppingSlice';
 
 interface AddItemModalProps {
     open: boolean;
@@ -46,6 +48,7 @@ const modalContentStyle = {
 };
 
 const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
+    const dispatch = useDispatch();
     const transitionDuration = 200;
     const quantities = [1, 2, 3];
     const [itemName, setItemName] = useState('');
@@ -58,11 +61,13 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
             setItemNameError(true);
             return;
         }
+        dispatch(setLoading(true));
         console.log({ itemName, quantity, description });
         setItemName('');
         setQuantity(0);
         setDescription('');
         setItemNameError(false);
+        dispatch(setLoading(false));
         onClose();
     };
 

@@ -4,10 +4,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 
-const CustomAppBar = styled(AppBar)({
-    backgroundColor: '#4D81B7',
-});
-
 const Title = styled(Typography)({
     fontFamily: 'Dosis',
     fontWeight: 600,
@@ -24,13 +20,13 @@ const Title = styled(Typography)({
 
 const Header: React.FC = () => {
     return (
-        <CustomAppBar>
+        <AppBar color='primary'>
             <Toolbar>
                 <Title>
                     Shopping List
                 </Title>
             </Toolbar>
-        </CustomAppBar>
+        </AppBar>
     );
 };
 
