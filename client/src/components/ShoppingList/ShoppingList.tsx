@@ -1,8 +1,13 @@
 import { Box, Typography, Button } from '@mui/material';
 import { useTypedSelector } from '../../store/hooks';
+import { useState } from 'react';
+import AddItemModal from './AddItemModal';
 
 const ShoppingList = () => {
     const items = useTypedSelector((state) => state.shopping.items);
+    const [openModal, setOpenModal] = useState(false);
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
 
     if (!items || items.length === 0) {
         return (
@@ -32,6 +37,7 @@ const ShoppingList = () => {
                     </Typography>
                     <Button
                         variant="contained"
+                        onClick={handleOpenModal}
                         sx={{
                             width: 151,
                             height: 36,
@@ -46,6 +52,7 @@ const ShoppingList = () => {
                         Add your first item
                     </Button>
                 </Box>
+                <AddItemModal open={openModal} onClose={handleCloseModal} />
             </Box>
         );
     }
