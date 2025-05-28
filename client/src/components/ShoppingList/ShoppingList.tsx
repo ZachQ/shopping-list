@@ -10,20 +10,21 @@ const ShoppingList = () => {
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                minHeight="70vh"
+                height="100vh"
+                px={{ xs: 2, md: 0 }}
             >
                 <Box
                     sx={{
                         padding: 4,
-                        width: 614,
-                        height: 290,
+                        width: 'min(614px, 100%)',
+                        minHeight: 290,
                         display: 'flex',
+                        boxSizing: 'border-box',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
                         border: '1px solid #C6C6C6',
                         borderRadius: '5px',
-                        mt: 2,
                     }}
                 >
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 2, textAlign: 'center' }}>
