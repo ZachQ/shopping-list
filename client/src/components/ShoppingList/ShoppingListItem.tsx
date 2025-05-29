@@ -4,7 +4,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { toggleCompleted } from '../../features/shopping/shoppingSlice';
+import { toggleCompleted, deleteItem } from '../../features/shopping/shoppingSlice';
 
 type Props = {
     item: {
@@ -17,6 +17,10 @@ type Props = {
 
 const ShoppingListItem = ({ item }: Props) => {
     const dispatch = useDispatch();
+
+    const handleDelete = () => {
+        dispatch(deleteItem(item.id));
+    };
 
     return (
         <Box
@@ -50,8 +54,11 @@ const ShoppingListItem = ({ item }: Props) => {
                     {item.description || 'No description'}
                 </Typography>
             </Box>
-            <div className='material-icons-outlined' style={{ color: '#555F7C', marginRight: '20px' }}>edit</div>
-            <div className='material-icons-outlined' style={{ color: '#555F7C', marginRight: '30px' }}>delete</div>
+            <div className='material-icons-outlined' style={{ color: '#555F7C', marginRight: '20px', cursor: 'pointer' }}>edit</div>
+            <div className='material-icons-outlined' onClick={handleDelete}
+                style={{ color: '#555F7C', marginRight: '30px', cursor: 'pointer' }}>
+                delete
+            </div>
         </Box>
     );
 };
