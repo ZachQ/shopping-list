@@ -13,3 +13,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model ShoppingItem {
+  id          String   @id @default(uuid())
+  itemName    String
+  quantity    Int
+  description String
+  completed   Boolean  @default(false)
+}
