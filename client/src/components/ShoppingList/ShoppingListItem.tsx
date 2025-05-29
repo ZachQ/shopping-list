@@ -3,10 +3,11 @@ import {
     Checkbox,
     Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleCompleted, deleteItem } from '../../features/shopping/shoppingSlice';
 import AddItemModal from './AddItemModal';
+import ConfirmationModal from './ConfirmationModal';
 
 type Props = {
     item: {
@@ -21,10 +22,7 @@ type Props = {
 const ShoppingListItem = ({ item }: Props) => {
     const dispatch = useDispatch();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-    const handleDelete = () => {
-        dispatch(deleteItem(item.id));
-    };
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
     const handleEdit = () => {
         setIsEditModalOpen(true);
@@ -32,6 +30,19 @@ const ShoppingListItem = ({ item }: Props) => {
 
     const handleCloseEditModal = () => {
         setIsEditModalOpen(false);
+    };
+
+    const handleDeleteClick = () => {
+        setIsConfirmationModalOpen(true);
+    };
+
+    const handleCloseConfirmationModal = () => {
+        setIsConfirmationModalOpen(false);
+    };
+
+    const handleDelete = () => {
+        dispatch(deleteItem(item.id));
+        setIsConfirmationModalOpen(false);
     };
 
     return (
@@ -67,11 +78,17 @@ const ShoppingListItem = ({ item }: Props) => {
                 </Typography>
             </Box>
             <div className='material-icons-outlined' style={{ color: '#555F7C', marginRight: '20px', cursor: 'pointer' }} onClick={handleEdit}>edit</div>
-            <div className='material-icons-outlined' onClick={handleDelete}
+            <div className='material-icons-outlined' onClick={handleDeleteClick}
                 style={{ color: '#555F7C', marginRight: '30px', cursor: 'pointer' }}>
                 delete
             </div>
             <AddItemModal open={isEditModalOpen} onClose={handleCloseEditModal} item={item} />
+            <ConfirmationModal
+                open={isConfirmationModalOpen}
+                onClose={handleCloseConfirmationModal}
+                onConfirm={handleDelete}
+                itemName={item.itemName}
+            />
         </Box>
     );
 };

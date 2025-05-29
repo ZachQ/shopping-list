@@ -121,8 +121,8 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
                     <ModalAppBar position='static'>
                         <Toolbar sx={{
                             minHeight: '64px',
-                            paddingLeft: 0,
-                            paddingRight: 0,
+                            paddingLeft: 1,
+                            paddingRight: 1,
                             justifyContent: 'space-between',
                         }}>
                             Shopping List
