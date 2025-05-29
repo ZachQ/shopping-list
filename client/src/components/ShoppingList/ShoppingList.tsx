@@ -2,6 +2,7 @@ import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTypedSelector } from '../../store/hooks';
 import { useState } from 'react';
 import AddItemModal from './AddItemModal';
+import ShoppingListItem from './ShoppingListItem';
 
 const ShoppingList = () => {
     const items = useTypedSelector((state) => state.shopping.items);
@@ -13,10 +14,10 @@ const ShoppingList = () => {
     if (loading) {
         return (
             <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="100vh"
+                display='flex'
+                justifyContent='center'
+                alignItems='center'
+                height='100vh'
             >
                 <CircularProgress color='primary' size={92} />
             </Box>
@@ -26,10 +27,10 @@ const ShoppingList = () => {
     if (!items || items.length === 0) {
         return (
             <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="100vh"
+                display='flex'
+                justifyContent='center'
+                alignItems='center'
+                height='100vh'
                 px={{ xs: 2, md: 0 }}
             >
                 <Box
@@ -46,12 +47,13 @@ const ShoppingList = () => {
                         borderRadius: '5px',
                     }}
                 >
-                    <Typography variant="body1" color="text.secondary" sx={{ mb: 2, textAlign: 'center' }}>
+                    <Typography variant='body1' color='text.secondary' sx={{ mb: 2, textAlign: 'center' }}>
                         Your shopping list is empty :(
                     </Typography>
                     <Button
-                        variant="contained"
+                        variant='contained'
                         onClick={handleOpenModal}
+                        color='secondary'
                         sx={{
                             width: 151,
                             height: 36,
@@ -69,9 +71,27 @@ const ShoppingList = () => {
                 <AddItemModal open={openModal} onClose={handleCloseModal} />
             </Box>
         );
+    } else {
+
+        return <>
+            <Box mt={6} p={4}>
+                <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
+                    <Typography variant='h6' color={'#000000'}>Your Items</Typography>
+                    <Button
+                        variant='contained'
+                        color='secondary'
+                        onClick={handleOpenModal}>
+                        Add Item
+                    </Button>
+                </Box>
+                <AddItemModal open={openModal} onClose={handleCloseModal} />
+                {items.map(item => (
+                    <ShoppingListItem key={item.id} item={item} />
+                ))}
+            </Box>
+        </>
     }
 
-    return <div>Your shopping list will be shown here.</div>;
 };
 
 export default ShoppingList;

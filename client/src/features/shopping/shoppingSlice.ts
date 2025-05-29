@@ -2,7 +2,9 @@ import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 
 interface ShoppingItem {
   id: string;
-  name: string;
+  itemName: string;
+  quantity: number;
+  description: string;
   completed: boolean;
 }
 
@@ -24,10 +26,12 @@ const shoppingSlice = createSlice({
       reducer: (state, action: PayloadAction<ShoppingItem>) => {
         state.items.push(action.payload);
       },
-      prepare: (name: string) => ({
+      prepare: (itemName: string, quantity: number, description: string) => ({
         payload: {
           id: nanoid(),
-          name,
+          itemName,
+          quantity,
+          description,
           completed: false,
         },
       }),
@@ -35,11 +39,11 @@ const shoppingSlice = createSlice({
     deleteItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(item => item.id !== action.payload);
     },
-    editItem: (state, action: PayloadAction<{ id: string; name: string }>) => {
-      const { id, name } = action.payload;
+    editItem: (state, action: PayloadAction<{ id: string; itemName: string }>) => {
+      const { id, itemName } = action.payload;
       const existing = state.items.find(item => item.id === id);
       if (existing) {
-        existing.name = name;
+        existing.itemName = itemName;
       }
     },
     toggleCompleted: (state, action: PayloadAction<string>) => {

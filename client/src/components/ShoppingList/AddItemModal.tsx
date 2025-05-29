@@ -16,7 +16,7 @@ import {
     styled,
     AppBar,
 } from '@mui/material';
-import { setLoading } from '../../features/shopping/shoppingSlice';
+import { setLoading, addItem } from '../../features/shopping/shoppingSlice';
 
 interface AddItemModalProps {
     open: boolean;
@@ -62,7 +62,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
             return;
         }
         dispatch(setLoading(true));
-        console.log({ itemName, quantity, description });
+        dispatch(addItem(itemName, quantity, description));
         setItemName('');
         setQuantity(0);
         setDescription('');
@@ -81,8 +81,8 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
 
     return (
         <Modal
-            aria-labelledby="add-item-modal-title"
-            aria-describedby="add-item-modal-description"
+            aria-labelledby='add-item-modal-title'
+            aria-describedby='add-item-modal-description'
             open={open}
             onClose={onClose}
             closeAfterTransition
@@ -97,9 +97,9 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
             }}
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-            <Slide direction="left" in={open} timeout={{ enter: transitionDuration, exit: transitionDuration }}>
+            <Slide direction='left' in={open} timeout={{ enter: transitionDuration, exit: transitionDuration }}>
                 <Box sx={modalContentStyle}>
-                    <ModalAppBar position="static">
+                    <ModalAppBar position='static'>
                         <Toolbar sx={{
                             minHeight: '64px',
                             paddingLeft: 0,
@@ -107,21 +107,21 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
                             justifyContent: 'space-between',
                         }}>
                             Shopping List
-                            <div onClick={onClose} className="material-icons">last_page</div>
+                            <div onClick={onClose} className='material-icons'>last_page</div>
                         </Toolbar>
                     </ModalAppBar>
 
 
                     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2, mb: 3, p: 4 }}>
-                    <Typography id="add-item-modal-title" variant="h6" component="h2" mt={1}>
+                    <Typography id='add-item-modal-title' variant='h6' component='h2' mt={1}>
                         Add an Item
                     </Typography>
-                    <Typography id="add-item-modal-title" variant="h6" component="h2" mb={3} mt={1}>
+                    <Typography id='add-item-modal-title' variant='h6' component='h2' mb={3} mt={1}>
                         Add your new item below
                     </Typography>
                         <TextField
-                            label="Item Name"
-                            variant="outlined"
+                            label='Item Name'
+                            variant='outlined'
                             fullWidth
                             value={itemName}
                             onChange={(e) => {
@@ -132,8 +132,8 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
                             helperText={itemNameError ? 'Item name is required' : ''}
                         />
                         <TextField
-                            label="Description"
-                            variant="outlined"
+                            label='Description'
+                            variant='outlined'
                             fullWidth
                             multiline
                             rows={4}
@@ -141,12 +141,12 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
                             onChange={(e) => setDescription(e.target.value)}
                         />
                         <FormControl fullWidth>
-                            <InputLabel id="quantity-select-label">How many?</InputLabel>
+                            <InputLabel id='quantity-select-label'>How many?</InputLabel>
                             <Select
-                                labelId="quantity-select-label"
-                                id="quantity-select"
+                                labelId='quantity-select-label'
+                                id='quantity-select'
                                 value={quantity}
-                                label="quantity"
+                                label='quantity'
                                 onChange={(e) => setQuantity(Number(e.target.value))}
                             >
                                 {quantities.map((option) => (
@@ -159,11 +159,11 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 4, width: '100%' }}>
-                        <Button variant="outlined" onClick={handleCancel} sx={{ textTransform: 'none' }}>
+                        <Button variant='outlined' onClick={handleCancel} sx={{ textTransform: 'none' }}>
                             Cancel
                         </Button>
-                        {/* should this be "Add Task" like in the Figma or "Add Item" to match the rest of the app? */}
-                        <Button variant="contained" onClick={handleAddItem} sx={{ textTransform: 'none' }}>
+                        {/* should this be 'Add Task' like in the Figma or 'Add Item' to match the rest of the app? */}
+                        <Button variant='contained' color='secondary' onClick={handleAddItem} sx={{ textTransform: 'none' }}>
                             Add Task
                         </Button>
                     </Box>
