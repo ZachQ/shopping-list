@@ -15,12 +15,20 @@ import {
     Toolbar,
     styled,
     AppBar,
+    Checkbox,
 } from '@mui/material';
-import { setLoading, addItem } from '../../features/shopping/shoppingSlice';
+import { setLoading, addItem, editItem, toggleCompleted } from '../../features/shopping/shoppingSlice';
 
 interface AddItemModalProps {
     open: boolean;
     onClose: () => void;
+    item?: {
+        id: string;
+        itemName: string;
+        quantity: number;
+        description?: string;
+        completed: boolean;
+    };
 }
 const ModalAppBar = styled(AppBar)({
     fontFamily: 'Dosis',
@@ -47,13 +55,13 @@ const modalContentStyle = {
     zIndex: 10,
 };
 
-const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
+const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
     const dispatch = useDispatch();
     const transitionDuration = 200;
     const quantities = [1, 2, 3];
-    const [itemName, setItemName] = useState('');
-    const [quantity, setQuantity] = useState(0);
-    const [description, setDescription] = useState('');
+    const [itemName, setItemName] = useState(item ? item.itemName ?? '' : '');
+    const [quantity, setQuantity] = useState(item ? item.quantity : 1);
+    const [description, setDescription] = useState(item ? item.description ?? '' : '');
     const [itemNameError, setItemNameError] = useState(false);
 
     const handleAddItem = () => {
@@ -62,7 +70,11 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
             return;
         }
         dispatch(setLoading(true));
-        dispatch(addItem(itemName, quantity, description));
+        if (item) {
+            dispatch(editItem({ id: item.id, itemName, quantity, description, completed: item.completed }));
+        } else {
+            dispatch(addItem(itemName, quantity, description));
+        }
         setItemName('');
         setQuantity(0);
         setDescription('');
@@ -78,6 +90,13 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
         setItemNameError(false);
         onClose();
     };
+
+    React.useEffect(() => {
+        if (!open) {
+            setItemName(item ? item.itemName ?? '' : '');
+            setDescription(item ? item.description ?? '' : '');
+        }
+    }, [open, item]);
 
     return (
         <Modal
@@ -113,12 +132,12 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
 
 
                     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2, mb: 3, p: 4 }}>
-                    <Typography id='add-item-modal-title' variant='h6' component='h2' mt={1}>
-                        Add an Item
-                    </Typography>
-                    <Typography id='add-item-modal-title' variant='h6' component='h2' mb={3} mt={1}>
-                        Add your new item below
-                    </Typography>
+                        <Typography id='add-item-modal-title' variant='h6' component='h2' mt={1}>
+                            {item ? 'Edit Item' : 'Add an Item'}
+                        </Typography>
+                        <Typography id='add-item-modal-title' variant='h6' component='h2' mb={3} mt={1}>
+                            {item ? 'Edit your item below' : 'Add your new item below'}
+                        </Typography>
                         <TextField
                             label='Item Name'
                             variant='outlined'
@@ -156,6 +175,15 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
                                 ))}
                             </Select>
                         </FormControl>
+                        {item && (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Checkbox
+                                    checked={item.completed}
+                                    onChange={() => dispatch(toggleCompleted(item.id))}
+                                />
+                                <Typography>Purchased</Typography>
+                            </Box>
+                        )}
                     </Box>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 4, width: '100%' }}>
@@ -164,7 +192,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose }) => {
                         </Button>
                         {/* should this be 'Add Task' like in the Figma or 'Add Item' to match the rest of the app? */}
                         <Button variant='contained' color='secondary' onClick={handleAddItem} sx={{ textTransform: 'none' }}>
-                            Add Task
+                            {item ? 'Save Item' : 'Add Task'}
                         </Button>
                     </Box>
                 </Box>

@@ -39,11 +39,14 @@ const shoppingSlice = createSlice({
     deleteItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(item => item.id !== action.payload);
     },
-    editItem: (state, action: PayloadAction<{ id: string; itemName: string }>) => {
-      const { id, itemName } = action.payload;
+    editItem: (state, action: PayloadAction<{ id: string; itemName: string; quantity: number; description: string; completed: boolean }>) => {
+      const { id, itemName, quantity, description, completed } = action.payload;
       const existing = state.items.find(item => item.id === id);
       if (existing) {
         existing.itemName = itemName;
+        existing.quantity = quantity;
+        existing.description = description;
+        existing.completed = completed;
       }
     },
     toggleCompleted: (state, action: PayloadAction<string>) => {

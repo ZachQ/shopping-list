@@ -3,13 +3,16 @@ import {
     Checkbox,
     Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleCompleted, deleteItem } from '../../features/shopping/shoppingSlice';
+import AddItemModal from './AddItemModal';
 
 type Props = {
     item: {
         id: string;
         itemName: string;
+        quantity: number;
         description?: string;
         completed: boolean;
     };
@@ -17,9 +20,18 @@ type Props = {
 
 const ShoppingListItem = ({ item }: Props) => {
     const dispatch = useDispatch();
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleDelete = () => {
         dispatch(deleteItem(item.id));
+    };
+
+    const handleEdit = () => {
+        setIsEditModalOpen(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setIsEditModalOpen(false);
     };
 
     return (
@@ -54,11 +66,12 @@ const ShoppingListItem = ({ item }: Props) => {
                     {item.description || 'No description'}
                 </Typography>
             </Box>
-            <div className='material-icons-outlined' style={{ color: '#555F7C', marginRight: '20px', cursor: 'pointer' }}>edit</div>
+            <div className='material-icons-outlined' style={{ color: '#555F7C', marginRight: '20px', cursor: 'pointer' }} onClick={handleEdit}>edit</div>
             <div className='material-icons-outlined' onClick={handleDelete}
                 style={{ color: '#555F7C', marginRight: '30px', cursor: 'pointer' }}>
                 delete
             </div>
+            <AddItemModal open={isEditModalOpen} onClose={handleCloseEditModal} item={item} />
         </Box>
     );
 };
