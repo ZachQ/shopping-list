@@ -1,5 +1,4 @@
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
-
 interface ShoppingItem {
   id: string;
   itemName: string;
@@ -26,9 +25,9 @@ const shoppingSlice = createSlice({
       reducer: (state, action: PayloadAction<ShoppingItem>) => {
         state.items.push(action.payload);
       },
-      prepare: (itemName: string, quantity: number, description: string) => ({
+      prepare: (id: string, itemName: string, quantity: number, description: string) => ({
         payload: {
-          id: nanoid(),
+          id,
           itemName,
           quantity,
           description,

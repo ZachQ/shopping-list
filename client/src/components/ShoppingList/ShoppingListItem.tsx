@@ -3,11 +3,12 @@ import {
     Checkbox,
     Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { toggleCompleted, deleteItem } from '../../features/shopping/shoppingSlice';
+import { toggleCompletedThunk, deleteItemThunk } from '../../features/shopping/shoppingThunks';
 import AddItemModal from './AddItemModal';
 import ConfirmationModal from './ConfirmationModal';
+import type { AppDispatch } from '../../store/store';
 
 type Props = {
     item: {
@@ -20,7 +21,7 @@ type Props = {
 };
 
 const ShoppingListItem = ({ item }: Props) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
@@ -41,8 +42,12 @@ const ShoppingListItem = ({ item }: Props) => {
     };
 
     const handleDelete = () => {
-        dispatch(deleteItem(item.id));
+        dispatch(deleteItemThunk(item.id));
         setIsConfirmationModalOpen(false);
+    };
+
+    const handleToggleCompleted = () => {
+        dispatch(toggleCompletedThunk(item.id, item.completed));
     };
 
     return (
@@ -59,7 +64,7 @@ const ShoppingListItem = ({ item }: Props) => {
         >
             <Checkbox
                 checked={item.completed}
-                onChange={() => dispatch(toggleCompleted(item.id))}
+                onChange={handleToggleCompleted}
             />
             <Box flexGrow={1} sx={{ display: 'flex', flexDirection: 'column', ml: 2.25 }}>
                 <Typography

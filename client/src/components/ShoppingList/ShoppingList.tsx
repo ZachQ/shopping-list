@@ -1,8 +1,12 @@
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTypedSelector } from '../../store/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddItemModal from './AddItemModal';
 import ShoppingListItem from './ShoppingListItem';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../../features/shopping/shoppingSlice';
+import { fetchItems } from '../../features/shopping/shoppingThunks';
+import type { AppDispatch } from '../../store/store';
 
 const ShoppingList = () => {
     const items = useTypedSelector((state) => state.shopping.items);
@@ -10,6 +14,16 @@ const ShoppingList = () => {
     const [openModal, setOpenModal] = useState(false);
     const handleOpenModal = () => setOpenModal(true);
     const handleCloseModal = () => setOpenModal(false);
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        const loadItems = async () => {
+            dispatch(setLoading(true));
+            await dispatch(fetchItems());
+            dispatch(setLoading(false));
+        };
+        loadItems();
+    }, [dispatch]);
 
     if (loading) {
         return (

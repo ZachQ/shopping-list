@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     Box,
@@ -17,7 +17,9 @@ import {
     AppBar,
     Checkbox,
 } from '@mui/material';
-import { setLoading, addItem, editItem, toggleCompleted } from '../../features/shopping/shoppingSlice';
+import { toggleCompleted } from '../../features/shopping/shoppingSlice';
+import { postItem, updateItem } from '../../features/shopping/shoppingThunks';
+import type { AppDispatch } from '../../store/store';
 
 interface AddItemModalProps {
     open: boolean;
@@ -56,30 +58,30 @@ const modalContentStyle = {
 };
 
 const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const transitionDuration = 200;
     const quantities = [1, 2, 3];
-    const [itemName, setItemName] = useState(item ? item.itemName ?? '' : '');
-    const [quantity, setQuantity] = useState(item ? item.quantity : 1);
-    const [description, setDescription] = useState(item ? item.description ?? '' : '');
+
+    const [itemName, setItemName] = useState(item?.itemName ?? '');
+    const [quantity, setQuantity] = useState(item?.quantity ?? 0);
+    const [description, setDescription] = useState(item?.description ?? '');
     const [itemNameError, setItemNameError] = useState(false);
 
-    const handleAddItem = () => {
+    const handleAddOrUpdate = async () => {
         if (itemName.trim() === '') {
             setItemNameError(true);
             return;
         }
-        dispatch(setLoading(true));
+
         if (item) {
-            dispatch(editItem({ id: item.id, itemName, quantity, description, completed: item.completed }));
+            await dispatch(updateItem({ id: item.id, itemName, quantity, description, completed: item.completed }));
         } else {
-            dispatch(addItem(itemName, quantity, description));
+            await dispatch(postItem(itemName, quantity, description));
         }
         setItemName('');
         setQuantity(0);
         setDescription('');
         setItemNameError(false);
-        dispatch(setLoading(false));
         onClose();
     };
 
@@ -91,10 +93,11 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
         onClose();
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!open) {
-            setItemName(item ? item.itemName ?? '' : '');
-            setDescription(item ? item.description ?? '' : '');
+            setItemName(item?.itemName ?? '');
+            setDescription(item?.description ?? '');
+            setQuantity(item?.quantity ?? 0);
         }
     }, [open, item]);
 
@@ -190,8 +193,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
                         <Button variant='outlined' onClick={handleCancel} sx={{ textTransform: 'none' }}>
                             Cancel
                         </Button>
-                        {/* should this be 'Add Task' like in the Figma or 'Add Item' to match the rest of the app? */}
-                        <Button variant='contained' color='secondary' onClick={handleAddItem} sx={{ textTransform: 'none' }}>
+                        <Button variant='contained' color='secondary' onClick={handleAddOrUpdate} sx={{ textTransform: 'none' }}>
                             {item ? 'Save Item' : 'Add Task'}
                         </Button>
                     </Box>
