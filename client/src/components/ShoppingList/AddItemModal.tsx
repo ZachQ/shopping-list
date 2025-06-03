@@ -66,6 +66,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
     const [quantity, setQuantity] = useState(item?.quantity ?? 0);
     const [description, setDescription] = useState(item?.description ?? '');
     const [itemNameError, setItemNameError] = useState(false);
+    const [completed, setCompleted] = useState(item?.completed ?? false);
 
     const handleAddOrUpdate = async () => {
         if (itemName.trim() === '') {
@@ -74,7 +75,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
         }
 
         if (item) {
-            await dispatch(updateItem({ id: item.id, itemName, quantity, description, completed: item.completed }));
+            await dispatch(updateItem({ id: item.id, itemName, quantity, description, completed }));
         } else {
             await dispatch(postItem(itemName, quantity, description));
         }
@@ -98,6 +99,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
             setItemName(item?.itemName ?? '');
             setDescription(item?.description ?? '');
             setQuantity(item?.quantity ?? 0);
+            setCompleted(item?.completed ?? false);
         }
     }, [open, item]);
 
@@ -181,8 +183,8 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ open, onClose, item }) => {
                         {item && (
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Checkbox
-                                    checked={item.completed}
-                                    onChange={() => dispatch(toggleCompleted(item.id))}
+                                    checked={completed}
+                                    onChange={(e) => setCompleted(e.target.checked)}
                                 />
                                 <Typography>Purchased</Typography>
                             </Box>
