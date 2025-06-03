@@ -92,7 +92,6 @@ const ShoppingListItem = ({ item }: Props) => {
                 open={isConfirmationModalOpen}
                 onClose={handleCloseConfirmationModal}
                 onConfirm={handleDelete}
-                itemName={item.itemName}
             />
         </Box>
     );

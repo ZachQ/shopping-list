@@ -13,10 +13,9 @@ interface ConfirmationModalProps {
     open: boolean;
     onClose: () => void;
     onConfirm: () => void;
-    itemName: string;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ open, onClose, onConfirm, itemName }) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ open, onClose, onConfirm }) => {
     return (
         <Dialog open={open} onClose={onClose} fullWidth
             maxWidth={false}

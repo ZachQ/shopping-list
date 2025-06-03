@@ -1,4 +1,4 @@
-import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 interface ShoppingItem {
   id: string;
   itemName: string;

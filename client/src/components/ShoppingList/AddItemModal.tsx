@@ -17,7 +17,6 @@ import {
     AppBar,
     Checkbox,
 } from '@mui/material';
-import { toggleCompleted } from '../../features/shopping/shoppingSlice';
 import { postItem, updateItem } from '../../features/shopping/shoppingThunks';
 import type { AppDispatch } from '../../store/store';
 
