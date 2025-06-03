@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Patch } from '@nestjs/common';
 import { ShoppingItemService } from './shopping-item.service';
 import { ShoppingItem } from '../generated/prisma/client';
 
 @Controller('shopping-items')
 export class ShoppingItemController {
-  constructor(private readonly shoppingItemService: ShoppingItemService) {}
+  constructor(private readonly shoppingItemService: ShoppingItemService) { }
 
   @Post()
   async createShoppingItem(@Body() data: { itemName: string; quantity: number; description: string }): Promise<ShoppingItem> {
@@ -27,6 +27,14 @@ export class ShoppingItemController {
     @Body() data: { itemName: string; quantity: number; description: string; completed: boolean },
   ): Promise<ShoppingItem> {
     return this.shoppingItemService.updateShoppingItem(id, data);
+  }
+
+  @Patch(':id')
+  async patchShoppingItem(
+    @Param('id') id: string,
+    @Body() data: Partial<{ itemName: string; quantity: number; description: string; completed: boolean }>
+  ): Promise<ShoppingItem> {
+    return this.shoppingItemService.patchShoppingItem(id, data);
   }
 
   @Delete(':id')

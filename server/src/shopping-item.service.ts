@@ -4,7 +4,7 @@ import { ShoppingItem } from '../generated/prisma/client';
 
 @Injectable()
 export class ShoppingItemService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createShoppingItem(data: { itemName: string; quantity: number; description: string }): Promise<ShoppingItem> {
     return this.prisma.shoppingItem.create({
@@ -23,6 +23,16 @@ export class ShoppingItemService {
   }
 
   async updateShoppingItem(id: string, data: { itemName: string; quantity: number; description: string; completed: boolean }): Promise<ShoppingItem> {
+    return this.prisma.shoppingItem.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async patchShoppingItem(
+    id: string,
+    data: Partial<{ itemName: string; quantity: number; description: string; completed: boolean }>
+  ): Promise<ShoppingItem> {
     return this.prisma.shoppingItem.update({
       where: { id },
       data,
