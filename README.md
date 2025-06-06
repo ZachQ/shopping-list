@@ -56,7 +56,7 @@ Make sure PostgreSQL is running and accessible from the DATABASE_URL in .env.
 `npm install`
 
 ### Start the development server
-`npm run start:dev`
+`npm run dev`
 
 # API Overview
 GET	/shopping-items	Fetch all items  
